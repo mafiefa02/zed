@@ -387,17 +387,9 @@ impl InlineAssistant {
         let mut selections = Vec::<Selection<Point>>::new();
         let mut newest_selection = None;
         for mut selection in initial_selections {
-            if selection.end > selection.start {
-                selection.start.column = 0;
-                // If the selection ends at the start of the line, we don't want to include it.
-                if selection.end.column == 0 {
-                    selection.end.row -= 1;
-                }
-                selection.end.column = snapshot
-                    .buffer_snapshot()
-                    .line_len(MultiBufferRow(selection.end.row));
-            } else if let Some(fold) =
-                snapshot.crease_for_buffer_row(MultiBufferRow(selection.end.row))
+            if selection.end == selection.start
+                && let Some(fold) =
+                    snapshot.crease_for_buffer_row(MultiBufferRow(selection.end.row))
             {
                 selection.start = fold.range().start;
                 selection.end = fold.range().end;
@@ -424,6 +416,15 @@ impl InlineAssistant {
                         }
                     }
                 }
+            } else {
+                selection.start.column = 0;
+                // If the selection ends at the start of the line, we don't want to include it.
+                if selection.end.column == 0 && selection.start.row != selection.end.row {
+                    selection.end.row -= 1;
+                }
+                selection.end.column = snapshot
+                    .buffer_snapshot()
+                    .line_len(MultiBufferRow(selection.end.row));
             }
 
             if let Some(prev_selection) = selections.last_mut()
