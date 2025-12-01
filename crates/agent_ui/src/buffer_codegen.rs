@@ -161,6 +161,7 @@ impl BufferCodegen {
             }));
         }
 
+        dbg!(&user_prompt);
         for (model, alternative) in iter::once(primary_model)
             .chain(alternative_models)
             .zip(&self.alternatives)
