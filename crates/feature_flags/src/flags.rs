@@ -18,8 +18,8 @@ impl FeatureFlag for PanicFeatureFlag {
     const NAME: &'static str = "panic";
 }
 
-pub struct InlineAssistantToolFeatureFlag;
+pub struct InlineAssistantV2FeatureFlag;
 
-impl FeatureFlag for InlineAssistantToolFeatureFlag {
-    const NAME: &'static str = "inline-assistant-tool";
+impl FeatureFlag for InlineAssistantV2FeatureFlag {
+    const NAME: &'static str = "inline-assistant-v2";
 }
